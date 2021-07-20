@@ -1,0 +1,43 @@
+extends layout
+
+block content
+    <div class="w3-bar w3-blue w3-large">
+        <a href="/mural" class="w3-bar-item w3-button ">Mural</a> 
+        <a href="/users/logout" class="w3-bar-item w3-button" style="float: right";>Logout</a>
+        <a href="/users/perfil" class="w3-bar-item w3-button" style="float: right";>Perfil</a>
+    </div>
+
+    
+    if(pubs.length>0)
+        #display.w3-card-4.modal
+        - var check = true;
+        <div class="w3-container w3-margin-top  w3-display-topmiddle" style="top:80px" >
+            .w3-container.w3-blue
+                h2.w3-center Publicações criadas nas últimas 24 horas
+            br
+            br
+            each pub,index in pubs
+                .w3-container.w3-blue
+                        a.w3-bar-item.w3-button(href='/users/pub/'+pub.id, style="display: flex; justify-content: center") #{pub.author} -  #{pub.data_created.substr(0,16).replace("T", " ")}
+                <div class="w3-container w3-card-4" style="width:1000px">
+                    <p style="text-align: justify;text-justify: inter-word;"> #{pub.description}</p>   
+                    <p> Avaliação da publicação: #{pub.pub_rating}     </p>  
+                    <br>
+                    <label class="w3-label">Comentários</label>
+                    each comentario in pub.comments
+                        <p style="display: flex; justify-content: left"> #{comentario.author_mail} - #{comentario.data.substr(0,16).replace("T", " ")} - #{comentario.text}</p>  
+                    <div id=#{index}>
+                    </div>
+                    <div>
+                        input.w3-input.w3-border.w3-light-grey(type='text' id="input"+index style="display: inline-block;width: 810px;")
+                        input.w3-btn.w3-left.w3-left.w3-blue-grey.w3-right(type='submit' style="display: inline-block;width: 150px;" value='Comentar')(onclick='add_comentario(' + '"' + utilizador.mail + '"' + ',' + '"'+ pub.author + '"' + ',' + '"'+   pub.data_created+ '"' + ',' + '"' + index + '"' + ')')     
+                    </div>
+                </div>
+                <br>
+                <br>
+        </div>
+    else
+        br
+        br
+        .w3-container.w3-blue
+            h2.w3-center Não foram criadas publicações nas últimas 24 horas
